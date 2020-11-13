@@ -14,7 +14,6 @@ namespace ServiceBus_Example
         public static async Task Main(string[] args)
         {
             var connectionString = Environment.GetEnvironmentVariable("SERVICEBUS");
-            Console.WriteLine(connectionString);
             queueClient = new QueueClient(connectionString, QueueName);
             ConfigureHandler();
             Console.ReadKey();
