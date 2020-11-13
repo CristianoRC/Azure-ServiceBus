@@ -8,15 +8,16 @@ namespace ServiceBus_Example
 {
     public class Program
     {
-        const string QueueName = "email";
+        const string QueueName = "emails";
         static IQueueClient queueClient;
 
         public static async Task Main(string[] args)
         {
             var connectionString = Environment.GetEnvironmentVariable("SERVICEBUS");
             Console.WriteLine(connectionString);
-            queueClient =  new QueueClient(connectionString, QueueName);
+            queueClient = new QueueClient(connectionString, QueueName);
             ConfigureHandler();
+            Console.ReadKey();
             await queueClient.CloseAsync();
         }
 
@@ -33,7 +34,9 @@ namespace ServiceBus_Example
 
         static async Task ProcessMessage(Message message, CancellationToken token)
         {
-            Console.WriteLine($"ID:{message.SystemProperties.SequenceNumber}{Environment.NewLine}Corpo:{Encoding.UTF8.GetString(message.Body)}");
+            Console.WriteLine($"ID:{message.SystemProperties.SequenceNumber}");
+            Console.WriteLine($"Corpo:{Environment.NewLine}{Encoding.UTF8.GetString(message.Body)}");
+            Console.WriteLine("------------------");
             await queueClient.CompleteAsync(message.SystemProperties.LockToken);
         }
 
